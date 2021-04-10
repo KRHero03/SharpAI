@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jul 30 19:21:18 2020
-
-@author: hp
-"""
+#referenced from https://github.com/vardanagarwal/Proctoring-AI
 
 import cv2
 import numpy as np
@@ -82,20 +77,6 @@ def contouring(thresh, mid, img, end_points, right=False):
         pass
     
 def process_thresh(thresh):
-    """
-    Preprocessing the thresholded image
-
-    Parameters
-    ----------
-    thresh : Array of uint8
-        Thresholded image to preprocess
-
-    Returns
-    -------
-    thresh : Array of uint8
-        Processed thresholded image
-
-    """
     thresh = cv2.erode(thresh, None, iterations=2) 
     thresh = cv2.dilate(thresh, None, iterations=4) 
     thresh = cv2.medianBlur(thresh, 3) 
@@ -103,23 +84,6 @@ def process_thresh(thresh):
     return thresh
 
 def print_eye_pos(img, left, right):
-    """
-    Print the side where eye is looking and display on image
-
-    Parameters
-    ----------
-    img : Array of uint8
-        Image to display on
-    left : int
-        Position obtained of left eye.
-    right : int
-        Position obtained of right eye.
-
-    Returns
-    -------
-    None.
-
-    """
     if left == right and left != 0:
         text = ''
         if left == 1:
