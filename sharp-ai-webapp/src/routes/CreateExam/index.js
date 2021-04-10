@@ -322,7 +322,6 @@ class CreateExam extends Component {
             content="Sharp AI Anti Cheat"
           />
         </MetaTags>
-        <Container className="home" style={{ width: "60%" }}>
           <Paper elevation={0}>
             <Grid className="createPost">
               <Grid item xs={12}>
@@ -444,7 +443,6 @@ class CreateExam extends Component {
               }
             />
           </Paper>
-        </Container>
       </Grid>
     );
   }

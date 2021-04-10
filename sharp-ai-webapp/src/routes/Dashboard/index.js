@@ -72,7 +72,6 @@ class Dashboard extends Component {
           })
         );
 
-        console.log(tExams);
 
         var tarr = [];
         await Promise.all(
@@ -119,7 +118,7 @@ class Dashboard extends Component {
   };
 
   handleExamDelete = async (examid) => {
-    const exams = this.state.exams.filter((exm) => exm.exam != examid);
+    const exams = this.state.exams.filter((exm) => exm.exam !== examid);
     this.setState({ exams });
     const db = firebase.firestore();
     const teacher = await db
@@ -127,11 +126,12 @@ class Dashboard extends Component {
       .doc(this.state.user.uid)
       .get();
     const teacherData = teacher.data();
-    teacherData.exams = exams;
+    let examList = teacherData.exams.filter((exam)=>exam!==examid)
+
     await db
       .collection("teachers")
       .doc(this.state.user.uid)
-      .set({ exams: exams }, { merge: true });
+      .set({ exams: examList }, { merge: true });
     await db.collection("exams").doc(examid).delete();
   };
 

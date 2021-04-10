@@ -106,7 +106,7 @@ class Navbar extends Component {
                 </div>
                 : null}
               <img src={Logo} alt="Logo" className='iconDesktop' />
-              <Typography href="/" component="a" className='title iconDesktop' variant="h6" noWrap>
+              <Typography href="/" component="a" className='title' variant="h6" noWrap>
                 Sharp AI
               </Typography>
 

@@ -47,6 +47,7 @@ class StudentAnalytic extends Component {
           .collection("teachers")
           .doc(this.state.user.uid);
         const teacherResult = await teacherRef.get();
+
         if (!teacherResult.exists) {
           this.props.history.push("/");
           return;
