@@ -16,6 +16,17 @@ We hope you like the Product and we hope to have a larger user base in future :)
 
 (PS : For all those who saw the video, we forgot to show you guys how the CSV looks like. Here's the file (no, we didn''t modify it) : https://docs.google.com/spreadsheets/d/1sKsA0cacXlb8KMm904hcPIjxfU8eo6g3wTGj8UQhnvE/edit?usp=sharing
 
+### Challenges we ran into
+
+Some of the challenges we ran into:
+
+- Fetching the Permissions from users while accessing their Webcam in Chrome Extension
+- Managing Webcam Surveillance in an Effective way
+- Maintaining Data so that the WebApp can be scalable later
+- Trying to localise the Deployment Model (we failed this one but we ll do it in future)
+- Managing to make the UI as User friendly and easy to access and handle as possible
+- Syncing flags with Remote Database at regular Intervals
+
 ### Steps to Run
 
 Follow the Instructions to clone the Repository:
