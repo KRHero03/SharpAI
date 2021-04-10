@@ -56,6 +56,7 @@ class CreateExam extends Component {
       startTime: "1495602000000",
       endTime: "1495602000000",
       Attendance: [],
+      btnClicked: false,
     };
   }
   async componentDidMount() {
@@ -217,7 +218,8 @@ class CreateExam extends Component {
     for (var i = 0; i < studentList.length; i++) {
       Flags[studentList[i].studentEmail] = "";
     }
-
+    const temp = this.state.examName;
+    console.log(temp);
     await db.collection("exams").doc(this.state.examName).set({
       Attendance,
       Flags,
@@ -227,7 +229,10 @@ class CreateExam extends Component {
     this.setState({
       ...this.state,
       examName: "",
+      btnClicked: true,
     });
+
+    this.props.history.push(`/exams/${temp}`);
   };
 
   dateHandler = (e) => {
@@ -331,23 +336,33 @@ class CreateExam extends Component {
               />
 
               <Grid item xs={12}>
-                <Box display="flex" flexDirection="row-reverse">
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    title="Create Post"
-                    aria-label="Create Post"
-                    arrow
+                {this.state.btnClicked ? (
+                  <Box
+                    display="flex"
+                    flexDirection="row-reverse"
+                    style={{ marginBottom: "1rem" }}
                   >
-                    <Fab
-                      color="secondary"
-                      className="createPostFAB"
-                      size="small"
-                      onClick={this.CreateExam}
+                    <CircularProgress color="secondary"></CircularProgress>
+                  </Box>
+                ) : (
+                  <Box display="flex" flexDirection="row-reverse">
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Create Post"
+                      aria-label="Create Post"
+                      arrow
                     >
-                      <Send />
-                    </Fab>
-                  </Tooltip>
-                </Box>
+                      <Fab
+                        color="secondary"
+                        className="createPostFAB"
+                        size="small"
+                        onClick={this.CreateExam}
+                      >
+                        <Send />
+                      </Fab>
+                    </Tooltip>
+                  </Box>
+                )}
               </Grid>
               <Divider />
             </Grid>
