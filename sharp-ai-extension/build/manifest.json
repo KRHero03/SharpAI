@@ -1,0 +1,36 @@
+{
+  "name": "Sharp AI Anti Cheat",
+  "description": "Sharp AI Exam Proctoring Chrome Extension.",
+  "version": "1.0",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "identity",
+    "identity.email",
+    "tabs",
+    "downloads"
+  ],
+  "icons": { "16": "logo192.png", "48": "logo192.png", "128": "logo512.png" },
+  "background": {
+    "scripts": [
+      "./lib/firebase.js",
+      "./lib/firestore.js",
+      "./lib/firebaseConfig.js",
+      "./scripts/background.js",
+      "./scripts/commit.js"
+    ]
+  },
+  "content_scripts":[
+    { 
+      "matches": ["<all_urls>"],
+      "js":[
+        "./scripts/video.js"
+      ]
+    }
+  ],
+  "browser_action": {
+    "default_popup": "index.html"
+  },
+  "content_security_policy": "script-src 'self' https://apis.google.com https://cdn.firebase.com https://*.firebaseio.com; object-src 'self'",
+  "manifest_version": 2
+}
