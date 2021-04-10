@@ -41,7 +41,7 @@ class Footer extends Component {
             <Link to='/ourstory'>About</Link>
           </Grid>
           <Grid item xs={3} sm={1}>
-            <Link to='/'>Blog</Link>
+            <Link to='/'>Security</Link>
           </Grid>
           <Grid item xs={3} sm={1}>
             <Link onClick={this.handleHelpModal}>Help</Link>
@@ -53,13 +53,13 @@ class Footer extends Component {
             <Link to='/'>API</Link>
           </Grid>
           <Grid item xs={3} sm={1}>
-            <Link to='/hashtags'>Hashtags</Link>
+            <Link to='/'>Anti Cheat</Link>
           </Grid>
           <Grid item xs={3} sm={1}>
-            <Link to='/'>Locations</Link>
+            <Link to='/'>Hire with Us</Link>
           </Grid>
           <Grid item xs={3} sm={1}>
-            <Link to='/accounts'>Accounts</Link>
+            <Link to='/'>Teach with Us</Link>
           </Grid>
           <Grid item xs={12}>
             <Link onClick={this.handlePolicyModal}>©Copyright 2021 - Present</Link>
