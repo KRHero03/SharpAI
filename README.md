@@ -16,4 +16,25 @@ We hope you like the Product and we hope to have a larger user base in future :)
 
 (PS : For all those who saw the video, we forgot to show you guys how the CSV looks like. Here's the file (no, we didn''t modify it) : https://docs.google.com/spreadsheets/d/1sKsA0cacXlb8KMm904hcPIjxfU8eo6g3wTGj8UQhnvE/edit?usp=sharing
 
+### Steps to Run
+
+Follow the Instructions to clone the Repository:
+```
+git clone https://github.com/KRHero03/SharpAI.git
+```
+
+Run Web App locally:
+```
+cd sharp-ai-webapp
+npm install 
+npm run
+```
+
+Run Chrome Extension:
+- Head over to Chrome > Settings > Extensions
+- Turn on Developer Mode
+- Click on Load Unpacked Extension
+- Select sharp-ai-extension/build as Extension Directory
+- Use the Extension
+
 ## Team DevDevils
