@@ -1,3 +1,4 @@
+![SharpAI](./sharp-ai-webapp/src/logo.png)
 # SharpAI Anti Cheat
 
 ### Gotta Catch 'Em All 
