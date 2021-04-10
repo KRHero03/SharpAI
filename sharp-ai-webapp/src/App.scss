@@ -1,0 +1,327 @@
+$xs: 0px;
+$sm: 600px;
+$md: 960px;
+$lg: 1280px;
+$xl: 1920px;
+*{
+  transition: 0.1s all ease-in-out;
+}
+$spacing: 8;
+
+a{
+  text-decoration: none;
+  color: inherit;
+  &:hover{
+    text-decoration: none;
+  }
+}
+
+.search {
+  position:relative;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.15);
+  &:hover {
+    background: rgba(255,255,255,0.25);
+  };
+  margin-right: 16px;
+  width: 100%;
+  @media screen and (min-width: $sm) {
+    margin-right: 24px;
+    width: auto;
+  }
+}
+
+.searchIcon {
+  padding: 6px;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputBase {
+  color: inherit;
+  padding: 4px;
+  padding-left: 33px;
+  width: 100%;
+  @media screen and (min-width: $sm){
+   input{
+    transition: 0.5s all ease-in-out;
+    width: 20ch;
+    &:focus {
+      width: 30ch;
+    }
+   } 
+  }
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.navbar {
+  background-color: black;
+}
+
+
+
+.menuButton {
+  margin-right: '16px';
+}
+
+
+
+.iconDesktop {
+  width: 0rem;
+  display: flex;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+
+  @media screen and (min-width: $sm) {
+    display: flex;
+    opacity: 1;
+    width: 2.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+
+
+.react-html5-camera-photo {
+  video {
+    width: 100%;
+  }
+}
+
+.title {
+  flex-grow: 1;
+  color: white;
+  text-decoration: none;
+  display: block;
+  transition: 1s all ease-in-out;
+
+  &:hover {
+    color: 'white';
+    text-decoration: 'none';
+  }
+
+  
+
+}
+
+
+
+.sectionDesktop {
+  &>* {
+    margin: #{$spacing*1px};
+  }
+
+  
+  display: none;
+
+  @media screen and (min-width: $sm) {
+    display: flex;
+  }
+}
+
+
+
+.navButtons *+* {
+  margin: 0.25rem;
+}
+
+.list {
+  width: '250px';
+}
+
+.drawerPhoto {
+  width: 4rem;
+  height: 4rem;
+}
+
+.block {
+  display: block;
+}
+
+.progressGrid {
+  display: flex;
+  justify-content: center;
+}
+
+
+/* Home SCSS */
+
+.home {
+  margin-top: 5rem;
+}
+
+.homeTitle {
+  font-size: 4rem;
+}
+
+.homeTitlePlaceholder {
+  width: 15rem;
+  height: 3rem;
+}
+
+.homeCenter {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.homeLogo {
+  width: 300px;
+}
+
+.homeLogoPlaceholder {
+  width: 300px;
+  height: 300px;
+}
+
+.signInButton {
+  background-color: #4285F4;
+}
+
+.homeButtonPlaceholder {
+  width: 15rem;
+  height: 2rem;
+}
+
+.homeGoogleLogo {
+  width: 2rem;
+  margin-right: 1rem;
+}
+
+/* Footer SASS */
+
+.footer {
+  margin-top: 7rem;
+}
+
+.footerCenter {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+  text-align: center;
+
+  * {
+    text-align: center;
+  }
+
+  a {
+    color:inherit;
+    text-decoration: none;
+    margin: 1rem;
+    font-size: 0.65rem;
+  }
+}
+
+/* Dashboard SASS */
+
+.mainContainer {
+  margin-top: 5rem;
+
+  @media screen and (min-width: $md) {
+    margin-left: 20rem;
+    margin-right: 20rem;
+  }
+}
+
+.rectangleSkeleton {
+  width: 100%;
+  height: 200px;
+  transform: scale(1,1);
+}
+
+.dashboardCreatePostPlaceholder {
+  height: 6rem;
+}
+
+.cardLink {
+  text-decoration: none;
+  div{
+    transition: 0.25s all ease-in-out;
+  }
+  &:hover{
+    cursor:pointer;
+    text-decoration: none;
+  }
+}
+
+
+/* CreatePost SASS */
+
+.createPost {
+  padding: 1rem;
+
+}
+
+
+.createPostTextField {
+  width: 100%;
+}
+
+.createPostFAB {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 1rem;
+}
+
+.createPostHeader {
+  align-items: center;
+}
+
+.createPostPreview {
+  p {
+    word-break: break-all;
+  }
+}
+
+/* Analytics SASS */
+.mainGrid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gridItem {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.mainLogo {
+  width: 2.5rem;
+  margin-right: 0.5rem;
+}
+
+.flagScroll {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.flagCard {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  width: 98%;
+}
+
+.type1{
+  background-color: rgba(255,0,0,0.2);
+}
+
+.type2{
+  background-color: rgba(255,0,0,0.5);
+}
+
+.type3{
+  background-color: rgba(255,0,0,0.8);
+}
+
+.mainBody{
+  background-image: url('./assets/background.svg');
+  background-size: cover;
+}

@@ -4,10 +4,6 @@ import firebase from "firebase";
 import { Skeleton } from "@material-ui/lab";
 import {
   Send,
-  Publish,
-  MoreVert,
-  Favorite,
-  Cancel,
   Close,
 } from "@material-ui/icons";
 
@@ -15,15 +11,9 @@ import MetaTags from "react-meta-tags";
 import {
   IconButton,
   FormControl,
-  FormLabel,
   FormGroup,
-  FormHelperText,
-  CardHeader,
-  Card,
-  CardActions,
   FormControlLabel,
   Checkbox,
-  CardContent,
   Container,
   Grid,
   Paper,
@@ -32,16 +22,12 @@ import {
   Fab,
   Tooltip,
   Zoom,
-  Divider,
-  Avatar,
   Typography,
   CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Snackbar,
-  ThemeProvider,
 } from "@material-ui/core";
+
+import emailjs from 'emailjs-com'
 
 class CreateExam extends Component {
   constructor(props) {
@@ -56,6 +42,9 @@ class CreateExam extends Component {
       startTime: "1495602000000",
       endTime: "1495602000000",
       Attendance: [],
+      btnClicked: false,
+      snackbarText: '',
+      openSnackbar: false,
     };
   }
   async componentDidMount() {
@@ -111,6 +100,7 @@ class CreateExam extends Component {
   };
 
   handleTextFieldChange = (e) => {
+    if(e.target.value.length>6) return
     this.setState({
       ...this.state,
       examName: e.target.value.toUpperCase(),
@@ -123,21 +113,46 @@ class CreateExam extends Component {
     this.setState({ ...this.state, checked: newChecked });
   };
 
-  CreateExam = async () => {
-    // Exam is 6 digit alphanumeric
+  getTime = (time) => {
+    const date = new Date(time);
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+  };
+  sendReminder = async (studentList) => {
+    try {
+
+      await Promise.all(studentList.map(async (student) => {
+        await emailjs.send("service_nf20pac", "template_4fv3qoc", {
+          to_name: student.studentDisplayName,
+          start_time: this.getTime(this.state.startTime),
+          end_time: this.getTime(this.state.endTime),
+          access_code: this.state.examName,
+          to_email: student.studentEmail.replace('(dot)','.'),
+        });
+
+      }))
+    } catch (e) {
+      console.log(e)
+      return
+    }
+  }
+
+  createExam = async () => {
 
     if (this.state.examName.length !== 6) {
-      this.showMessage("Code should be of 6 digits");
+      this.showMessage("Code should be of 6 characters!");
       return;
     } else if (!this.state.examName.match(/^[0-9A-Z ]+$/)) {
-      this.showMessage("Code should be aphaNumeric");
+      this.showMessage("Code should be AlphaNumeric!");
       return;
     }
+    this.setState({
+      btnClicked: true
+    })
     const db = firebase.firestore();
 
     // Exam code is not repeated
     let flag = false;
-    db.collection("exams")
+    await db.collection("exams")
       .doc(this.state.examName)
       .get()
       .then((docSnapshot) => {
@@ -147,12 +162,18 @@ class CreateExam extends Component {
         }
       });
     if (flag) {
+      this.setState({
+        btnClicked: false
+      })
       return;
     }
 
     // Validating Time
     if (this.state.startTime < new Date().getTime()) {
       this.showMessage("Please Select Valid Time");
+      this.setState({
+        btnClicked: false
+      })
       return;
     }
 
@@ -165,9 +186,15 @@ class CreateExam extends Component {
     }
     if (checkedClass.length === 0) {
       this.showMessage("Please Select Some Classes first");
+      this.setState({
+        btnClicked: false
+      })
       return;
     } else if (this.state.startTime >= this.state.endTime) {
       this.showMessage("Please Select Valid Time");
+      this.setState({
+        btnClicked: false
+      })
       return;
     }
 
@@ -207,7 +234,6 @@ class CreateExam extends Component {
       })
     );
 
-    // Adding attendance and flags for exams
     const Attendance = {};
     console.log(studentList.length);
     for (var i = 0; i < studentList.length; i++) {
@@ -217,17 +243,25 @@ class CreateExam extends Component {
     for (var i = 0; i < studentList.length; i++) {
       Flags[studentList[i].studentEmail] = "";
     }
-
+    const temp = this.state.examName;
+    console.log(temp);
     await db.collection("exams").doc(this.state.examName).set({
       Attendance,
       Flags,
       EndTime: this.state.endTime,
       StartTime: this.state.startTime,
     });
+
+
+    await this.sendReminder(studentList)
+    
     this.setState({
       ...this.state,
       examName: "",
+      btnClicked: false,
     });
+
+    this.props.history.push(`/exams/${temp}`);
   };
 
   dateHandler = (e) => {
@@ -239,7 +273,40 @@ class CreateExam extends Component {
     });
   };
 
+  getCurrentTime = () => {
+    const date = new Date()
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
+    month  = month<10?'0'+month:month
+    let day = date.getDate()
+    day  = day<10?'0'+day:day
+    let hour = date.getHours()
+    hour  = hour<10?'0'+hour:hour
+    let min = date.getMinutes()
+    min  = min<10?'0'+min:min
+    return ''+year+'-'+month+'-'+day+'T'+hour+':'+min
+  }
+
   render() {
+    if(this.state.isUserDataLoading) 
+    return (
+      <Grid className='mainContainer'>
+        <MetaTags>
+          <title>Create Exam | Sharp AI</title>
+          <meta
+            id="meta-description"
+            name="description"
+            content="Create Exam at Sharp AI"
+          />
+          <meta
+            id="og-title"
+            property="og:title"
+            content="Sharp AI Anti Cheat"
+          />
+        </MetaTags>
+        <Skeleton type='rect' className='rectangleSkeleton'/>
+      </Grid>
+    );
     return (
       <Grid className="mainContainer">
         <MetaTags>
@@ -270,23 +337,13 @@ class CreateExam extends Component {
                   value={this.state.examName}
                   rowsMax="3"
                 />
+                <Typography variant='caption' color='textSecondary'>Exam Code should be a 6 character Alphanumeric Code</Typography>
 
                 <div className="" style={{ marginTop: "2rem" }}>
                   <FormControl component="fieldset">
-                    <FormLabel component="legend">Choose Classes</FormLabel>
+                    <Typography color='textSecondary' >Choose Classes</Typography>
+                <Typography variant='caption' color='textSecondary'>Choose classes for which you want to conduct the Proctoring session</Typography>
                     <FormGroup>
-                      {/* <FormControlLabel
-                        control={<Checkbox checked={true} onChange={this.handleChange} name="gilad" />}
-                        label="Gilad Gray"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={false} onChange={this.handleChange} name="jason" />}
-                        label="Jason Killian"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={true} onChange={this.handleChange} name="antoine" />}
-                        label="Antoine Llorca"
-                      /> */}
                       {this.state.classes.map((classid, indx) => {
                         return (
                           <FormControlLabel
@@ -311,7 +368,9 @@ class CreateExam extends Component {
                 label="Starting Time"
                 name="startTime"
                 type="datetime-local"
-                defaultValue="2017-05-24T10:30"
+                color='secondary'
+                className='createPostTextField'
+                defaultValue={this.getCurrentTime()}
                 style={{ marginTop: "2rem" }}
                 InputLabelProps={{
                   shrink: true,
@@ -321,35 +380,45 @@ class CreateExam extends Component {
                 onChange={this.dateHandler}
                 id="datetime-local"
                 name="endTime"
-                label="EndingTime"
+                label="End Time"
                 type="datetime-local"
-                defaultValue="2017-05-24T10:30"
-                style={{ marginTop: "2rem", display: "block" }}
+                color='secondary'
+                className='createPostTextField'
+                defaultValue={this.getCurrentTime()} 
+                style={{ marginTop: "2rem" }}
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
 
               <Grid item xs={12}>
-                <Box display="flex" flexDirection="row-reverse">
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    title="Create Post"
-                    aria-label="Create Post"
-                    arrow
+                {this.state.btnClicked ? (
+                  <Box
+                    display="flex"
+                    flexDirection="row-reverse"
                   >
-                    <Fab
-                      color="secondary"
-                      className="createPostFAB"
-                      size="small"
-                      onClick={this.CreateExam}
+                    <CircularProgress color="secondary" style={{marginTop: 10,marginBottom: 10}}/>
+                  </Box>
+                ) : (
+                  <Box display="flex" flexDirection="row-reverse">
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Create Exam"
+                      aria-label="Create Exam"
+                      arrow
                     >
-                      <Send />
-                    </Fab>
-                  </Tooltip>
-                </Box>
+                      <Fab
+                        color="secondary"
+                        className="createPostFAB"
+                        size="small"
+                        onClick={this.createExam}
+                      >
+                        <Send />
+                      </Fab>
+                    </Tooltip>
+                  </Box>
+                )}
               </Grid>
-              <Divider />
             </Grid>
 
             <Snackbar

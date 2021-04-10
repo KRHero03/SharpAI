@@ -1,11 +1,9 @@
-import React ,{ Component } from "react"
+import React, { Component } from "react"
 import { withRouter } from 'react-router-dom'
-import { Send, Publish, MoreVert, Favorite, Cancel,Close } from '@material-ui/icons'
-import CameraIcon from '@material-ui/icons/Camera'
+import { Send, Close } from '@material-ui/icons'
 import firebase from 'firebase'
-import { IconButton,  CardHeader, Card, CardActions, CardContent, Container, Grid, Paper, TextField, Box, Fab, Tooltip, Zoom, Divider, Avatar, Typography, CircularProgress, Dialog, DialogContent, DialogTitle,Snackbar, ThemeProvider } from '@material-ui/core'
+import { IconButton, Container, Grid, Paper, TextField, Box, Fab, Tooltip, Zoom, Divider, Typography, Snackbar, CircularProgress } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import CreatePost from '../../components/CreatePost'
 import MetaTags from 'react-meta-tags'
 
 
@@ -17,7 +15,8 @@ class CreateClass extends Component {
       user: null,
       isAuthenticated: false,
       isUserDataLoading: true,
-
+      isButtonClicked: false,
+      className: "",
     }
   }
   async componentDidMount() {
@@ -28,7 +27,7 @@ class CreateClass extends Component {
           user: user,
           isUserDataLoading: false,
           isAuthenticated: true,
-          className:"",
+          className: "",
           snackbarText: '',
           openSnackbar: false,
         })
@@ -66,87 +65,93 @@ class CreateClass extends Component {
   }
 
   CreateClass = async () => {
-    // Validations..
-    if(this.state.className === "")
-    {
-      this.showMessage('Empty Field')
+    this.setState({
+      isButtonClicked: true
+    })
+    if (this.state.className.length === 0) {
+      this.showMessage('Please enter a valid Class Name!')
+      return
     }
-    else
-    {
 
 
-      const db = firebase.firestore();
-      const data =  await db.collection("teachers").doc(this.state.user.uid).collection("classes").doc(this.state.className).get()
-      if( data.exists)
-      {
-        this.showMessage('Class Already Exists')
-      }
-      else
-      {
-        const ref =await db.collection("teachers").doc(this.state.user.uid).collection("classes").doc(this.state.className).set({});
-        this.props.history.push(`/myclass/${this.state.className}`)
-      }
-      
-      
+    const db = firebase.firestore();
+    const data = await db.collection("teachers").doc(this.state.user.uid).collection("classes").doc(this.state.className).get()
+    if (data.exists) {
+      this.showMessage('The given Class Name already exists!')
+      this.setState({
+        isButtonClicked: false
+      })
     }
+    else {
+      const ref = await db.collection("teachers").doc(this.state.user.uid).collection("classes").doc(this.state.className).set({});
+      await this.setState({
+        isButtonClicked: true
+      })
+      this.props.history.push(`/myclass/${this.state.className}`)
+    }
+
+
+
 
   }
 
   render() {
     return (
-     
-      <Container className = "home" style= {{width: "60%"}}> 
-      <Paper elevation={0} >
-       
-        <Grid className='createPost'>
-          <Grid item xs={12}>
-            <TextField
-              className='createPostTextField'
-              label="Write Your Class Name"
-              id="outlined-size-normal"
-              variant="outlined"
-              color='secondary'
-              multiline
-              onChange={this.handleTextFieldChange}
-              value={this.state.className}
 
-              rowsMax='3'
-            />
-           
-          </Grid>
-          <Grid item xs={12}>
+      <Container className="home" style={{ width: "60%" }}>
+        <Paper elevation={0} >
 
-          <Box display='flex' flexDirection="row-reverse">
-              <Tooltip TransitionComponent={Zoom} title="Create Post" aria-label="Create Post" arrow>
-                <Fab color="secondary" className='createPostFAB' size='small' onClick={this.CreateClass} >
-                  <Send />
-                </Fab>
-              </Tooltip>
-             
-            </Box>
+          <Grid className='createPost'>
+            <Grid item xs={12}>
+              <TextField
+                className='createPostTextField'
+                label="Write Your Class Name"
+                id="outlined-size-normal"
+                variant="outlined"
+                color='secondary'
+                onChange={this.handleTextFieldChange}
+                value={this.state.className}
+              />
+
+            </Grid>
+            <Grid item xs={12}>
+
+              <Box display='flex' flexDirection="row-reverse">
+                {
+                  this.state.isButtonClicked
+                    ?
+                    <CircularProgress style={{marginTop: 10,marginBottom: 10}} color='secondary' />
+                    :
+                    <Tooltip TransitionComponent={Zoom} title="Create New Class" aria-label="Create New Class" arrow>
+                      <Fab color="secondary" className='createPostFAB' size='small' onClick={this.CreateClass} >
+                        <Send />
+                      </Fab>
+                    </Tooltip>
+                }
+
+              </Box>
+            </Grid>
+
           </Grid>
-          <Divider />
-          
-        </Grid>
-      
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          open={this.state.openSnackbar}
-          autoHideDuration={6000}
-          onClose={this.handleSnackbar}
-          message={this.state.snackbarText}
-          action={
-            <React.Fragment>
-              <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleSnackbar}>
-                <Close fontSize="small" />
-              </IconButton>
-            </React.Fragment>
-          }
-        />
-      </Paper>
+
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            open={this.state.openSnackbar}
+            autoHideDuration={6000}
+            onClose={this.handleSnackbar}
+            message={this.state.snackbarText}
+            action={
+              <React.Fragment>
+                <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleSnackbar}>
+                  <Close fontSize="small" />
+                </IconButton>
+              </React.Fragment>
+            }
+          />
+        </Paper>
       </Container>
 
     )
