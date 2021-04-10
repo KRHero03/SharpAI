@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+import './App.scss';
+import { StylesProvider } from '@material-ui/core/styles';
+import {Grid} from '@material-ui/core'
+import MainWidget from './components/MainWidget'
+import Logo from './logo.png'
+import firebase from 'firebase'
+import firebaseConfig from './config/firebaseConfig'
+
+firebase.initializeApp(firebaseConfig)
+
+const askPermission =  function () { 
+  navigator.permissions.query({name: 'camera'})
+  .then((permissionObj) => {
+   if(permissionObj.state!=='granted') askPermission()
+  })
+  .catch((error) => {
+   console.log('Got error :', error);
+  })
+}
 
 function App() {
+  askPermission()
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: 'dark'
+    },
+  })
+  const [isAuthenticated, setAuthenticated] = useState(false)
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <StylesProvider injectFirst>
+          <Grid item xs={12} className='mainGrid'>
+            <MainWidget/>
+          </Grid>
+        </StylesProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

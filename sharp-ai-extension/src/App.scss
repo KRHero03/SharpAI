@@ -1,0 +1,71 @@
+.mainGrid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainCard {
+    width: 500px;
+}
+
+.rectangleSkeleton {
+    width: 500px;
+    height: 200px;
+    transform: scale(1,1);
+}
+
+.gridItem {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.mainLogo {
+    width: 50px;
+    height: 50px;
+}
+
+.homeGoogleLogo {
+    width: 2rem;
+    margin-right: 1rem;
+}
+
+.examCodeTextField {
+    width: 100%;
+}
+
+.mainButton {
+    width: 100%;
+}
+
+.flagScroll {
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.flagCard {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    width: 98%;
+}
+
+.type1{
+    background-color: rgba(255,0,0,0.2);
+}
+
+.type2{
+    background-color: rgba(255,0,0,0.5);
+}
+
+.type3{
+    background-color: rgba(255,0,0,0.8);
+}
+.blink {
+    opacity: 1;
+    animation: fade 2s linear infinite;
+}
+
+
+@keyframes fade {
+  0%,100% { opacity: 0 }
+  50% { opacity: 1 }
+}
